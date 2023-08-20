@@ -1,33 +1,45 @@
-{% extends 'base.html' %}
+<!-- dashboard.html -->
 
-{% block title %}Kullanıcı Paneli{% endblock %}
-
-{% block header %}Hoş Geldiniz, {{ user.username }}{% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-    <h2>Kullanıcı Paneli</h2>
-    
-    <!-- Kullanıcı bilgilerini görüntüleme -->
-    <h3>Kullanıcı Bilgileri</h3>
-    <p>Kullanıcı Adı: {{ user.username }}</p>
-    <p>E-posta: {{ user.email }}</p>
-    
-    <!-- Kaydedilmiş şifrelerin listesi -->
-    <h3>Kaydedilmiş Şifreler</h3>
-    <ul>
-        {% for password in user.passwords.all %}
-            <li>{{ password.website }} - {{ password.username }}</li>
-            <!-- Şifre bilgilerini daha fazla detayla görüntüleme -->
-        {% endfor %}
-    </ul>
-    
-    <!-- Yeni şifre ekleme formu -->
-    <h3>Yeni Şifre Ekle</h3>
-    <form method="post">
-        {% csrf_token %}
-        <!-- Form alanları (website, kullanıcı adı, şifre vb.) -->
-        <button type="submit">Ekle</button>
-    </form>
-</div>
+  <h1>Dashboard</h1>
+  
+  <!-- Ekle Butonu -->
+  <a href="{% url 'add_password' %}" class="btn btn-primary">Ekle</a>
+  
+  <!-- Parola Listesi -->
+  <table>
+    <thead>
+      <tr>
+        <th>Website</th>
+        <th>Kullanıcı Adı</th>
+        <th>Parola</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for password in passwords %}
+      <tr>
+        <td>{{ password.website }}</td>
+        <td>{{ password.username }}</td>
+        <td>
+          <span>{{ password.get_password_display }}</span>
+          <button onclick="copyToClipboard('{{ password.password }}')">Kopyala</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <script>
+    function copyToClipboard(text) {
+      const tempInput = document.createElement('input');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      alert('Parola kopyalandı: ' + text);
+    }
+  </script>
 {% endblock %}

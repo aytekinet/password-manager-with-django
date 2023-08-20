@@ -9,5 +9,8 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='myapp/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('register/', views.register_view, name='register'),  # 'your_register_view' yerine 'views.register_view' kullanılır
+    path('add_password/', views.add_password, name='add_password'),
+
+
     # Diğer URL tanımları buraya gelebilir
 ]

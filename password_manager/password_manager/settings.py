@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -47,14 +48,25 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+
+
+
 ]
+
+LOGIN_URL = '/login/'  # Kullanıcı giriş yapmadığında yönlendirilecek URL
+LOGIN_REDIRECT_URL = '/dashboard/'  # Başarılı giriş sonrası yönlendirilecek URL
+
+
 
 ROOT_URLCONF = 'password_manager.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / "password_manager_app/templates",  # Bu kısmı boş bırakın veya kullanmıyorsanız silin
+        ],  # Bu kısmı boş bırakın veya kullanmıyorsanız silin
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

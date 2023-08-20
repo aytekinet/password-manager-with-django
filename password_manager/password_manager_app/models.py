@@ -11,16 +11,19 @@ from django.contrib.auth.models import Group, Permission  # Group ve Permission 
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Password(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="user_passwords"  # Örnek bir related_name ekleyin
+        related_name="user_passwords"
     )
     website = models.CharField(max_length=100)
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)  # Oluşturulma zamanı otomatik olarak atanır
+    updated_at = models.DateTimeField(auto_now=True)  # Her güncellemede güncellenir
 
     def __str__(self):
         return self.website

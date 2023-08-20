@@ -11,6 +11,8 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),  # 'your_register_view' yerine 'views.register_view' kullanılır
     path('add_password/', views.add_password, name='add_password'),
     path('delete_password/<int:password_id>/', views.delete_password, name='delete_password'),
+    path('update_password/<int:password_id>/', views.update_password, name='update_password'),
+
 
 
 

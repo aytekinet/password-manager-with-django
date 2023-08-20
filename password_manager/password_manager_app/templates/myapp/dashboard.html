@@ -37,6 +37,7 @@
         </td>
         <td>
           <a href="{% url 'delete_password' password.id %}" class="delete-password">Sil</a>
+          <a href="{% url 'update_password' password.id %}" class="update-password">Güncelle</a>
         </td>
       </tr>
       {% empty %}

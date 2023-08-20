@@ -75,3 +75,38 @@ def delete_password(request, password_id):
         return redirect('dashboard')
 
     return render(request, 'myapp/delete_password_confirm.html', {'password': password})
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Password
+from .forms import PasswordForm
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Password
+from .forms import PasswordForm
+
+def update_password(request, password_id):
+    password = get_object_or_404(Password, pk=password_id)
+    
+    if request.method == 'POST':
+        form = PasswordForm(request.POST)
+        if form.is_valid():
+            # Mevcut şifrenin verilerini formdan gelen verilerle güncelle
+            password.website = form.cleaned_data['website']
+            password.username = form.cleaned_data['username']
+            new_password = form.cleaned_data['password']
+            
+            if new_password == form.cleaned_data['confirm_password']:
+                password.password = new_password
+                password.save()
+                return redirect('dashboard')
+            else:
+                form.add_error('confirm_password', 'Parolalar uyuşmuyor.')
+    else:
+        form = PasswordForm(initial={
+            'website': password.website,
+            'username': password.username,
+            'password': password.password
+        })
+    
+    return render(request, 'myapp/update_password.html', {'form': form, 'password': password})

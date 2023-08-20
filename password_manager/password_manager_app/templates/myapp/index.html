@@ -2,9 +2,15 @@
 
 {% block title %}Ana Sayfa{% endblock %}
 
-{% block header %}Hoş Geldiniz{% endblock %}
+{% block header %}
+  {% if user.is_authenticated %}
+    Hoş Geldiniz, {{ user.username }}!
+  {% else %}
+    Hoş Geldiniz
+  {% endif %}
+{% endblock %}
 
 {% block content %}
-<p>Merhaba, bu ana sayfa içeriğidir.</p>
-<!-- Diğer içerikler buraya gelebilir -->
+  <p>Merhaba, bu ana sayfa içeriğidir.</p>
+  <!-- Diğer içerikler buraya gelebilir -->
 {% endblock %}

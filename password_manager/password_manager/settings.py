@@ -57,6 +57,8 @@ MIDDLEWARE = [
 
 LOGIN_URL = '/login/'  # Kullanıcı giriş yapmadığında yönlendirilecek URL
 LOGIN_REDIRECT_URL = '/dashboard/'  # Başarılı giriş sonrası yönlendirilecek URL
+LOGOUT_REDIRECT_URL = 'index'
+
 
 
 

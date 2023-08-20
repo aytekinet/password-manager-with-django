@@ -15,31 +15,91 @@
         <th>Website</th>
         <th>Kullanıcı Adı</th>
         <th>Parola</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       {% for password in passwords %}
       <tr>
-        <td>{{ password.website }}</td>
-        <td>{{ password.username }}</td>
         <td>
-          <span>{{ password.get_password_display }}</span>
-          <button onclick="copyToClipboard('{{ password.password }}')">Kopyala</button>
+          {{ password.website }}
+          <button class="go-website" data-website="{{ password.website }}">Git</button>
         </td>
+        <td>
+          {{ password.username }}
+          <button class="copy-username" data-username="{{ password.username }}">Kopyala</button>
+        </td>
+        <td>
+          <span class="password" data-password="{{ password.password }}">
+            {% for i in password.password %}*{% endfor %}
+          </span>
+          <button class="copy-password">Kopyala</button>
+        </td>
+        <td>
+          <a href="{% url 'delete_password' password.id %}" class="delete-password">Sil</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4">Kaydedilmiş şifre yok.</td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
   
   <script>
-    function copyToClipboard(text) {
-      const tempInput = document.createElement('input');
-      tempInput.value = text;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand('copy');
-      document.body.removeChild(tempInput);
-      alert('Parola kopyalandı: ' + text);
-    }
+    // Parola Kopyalama
+    document.querySelectorAll(".copy-password").forEach(button => {
+      button.addEventListener("click", function() {
+        const passwordSpan = this.parentElement.querySelector(".password");
+        const password = passwordSpan.getAttribute("data-password");
+        
+        const tempInput = document.createElement('input');
+        tempInput.value = password;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        
+        // Buton metnini "Kopyalandı" olarak değiştir
+        this.textContent = "Kopyalandı";
+  
+        // 2 saniye sonra buton metnini tekrar "Kopyala" olarak geri değiştir
+        setTimeout(() => {
+          this.textContent = "Kopyala";
+        }, 2000);
+      });
+    });
+  
+    // Kullanıcı Adı Kopyalama
+    document.querySelectorAll(".copy-username").forEach(button => {
+      button.addEventListener("click", function() {
+        const username = this.getAttribute("data-username");
+        
+        const tempInput = document.createElement('input');
+        tempInput.value = username;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        
+        // Buton metnini "Kopyalandı" olarak değiştir
+        this.textContent = "Kopyalandı";
+  
+        // 2 saniye sonra buton metnini tekrar "Kopyala" olarak geri değiştir
+        setTimeout(() => {
+          this.textContent = "Kopyala";
+        }, 2000);
+      });
+    });
+  
+    // Web sitesine gitme
+    document.querySelectorAll(".go-website").forEach(button => {
+      button.addEventListener("click", function() {
+        const website = this.getAttribute("data-website");
+        window.open(website, "_blank");
+      });
+    });
   </script>
+  
 {% endblock %}

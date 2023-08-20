@@ -62,3 +62,16 @@ def add_password(request):
         error_message = ""
 
     return render(request, 'myapp/add_password.html', {'form': form, 'error_message': error_message})
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Password
+
+def delete_password(request, password_id):
+    password = get_object_or_404(Password, pk=password_id)
+
+    if request.method == 'POST':
+        password.delete()
+        return redirect('dashboard')
+
+    return render(request, 'myapp/delete_password_confirm.html', {'password': password})

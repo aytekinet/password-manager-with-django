@@ -10,6 +10,8 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('register/', views.register_view, name='register'),  # 'your_register_view' yerine 'views.register_view' kullanılır
     path('add_password/', views.add_password, name='add_password'),
+    path('delete_password/<int:password_id>/', views.delete_password, name='delete_password'),
+
 
 
     # Diğer URL tanımları buraya gelebilir

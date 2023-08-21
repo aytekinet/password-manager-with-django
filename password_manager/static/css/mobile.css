@@ -1,0 +1,17 @@
+/* mobile.css */
+@media screen and (max-width: 768px) {
+    .table-responsive table {
+        width: 100%;
+        margin-bottom: 15px;
+        border-collapse: collapse;
+        border-spacing: 0;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+    
+    .table-responsive th,
+    .table-responsive td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+}

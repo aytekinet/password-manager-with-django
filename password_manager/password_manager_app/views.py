@@ -9,9 +9,18 @@ def index(request):
 
 from .models import Password
 
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from .models import Password
+
 def dashboard(request):
     passwords = Password.objects.filter(user=request.user)
-    return render(request, 'myapp/dashboard.html', {'passwords': passwords})
+    paginator = Paginator(passwords, 10)  # 10 parola her sayfada gösterilecek
+
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+
+    return render(request, 'myapp/dashboard.html', {'page': page})
 
 def login_view(request):
     # Giriş yapma işlemleri burada gerçekleştirilir

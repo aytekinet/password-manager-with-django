@@ -1,111 +1,103 @@
-<!-- dashboard.html -->
-
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Dashboard</h1>
+<div class="container mt-4">
+    <h1 style="margin-bottom: 25px;">Dashboard</h1>
   
-<!-- Ekle Butonu -->
-<a href="{% url 'add_password' %}" class="btn btn-primary">Ekle</a>
+  <!-- Ekle Butonu -->
+  <a href="{% url 'add_password' %}" class="btn btn-primary mb-3">Parola Ekle</a>
 
-<!-- Parola Listesi -->
-<table>
-  <thead>
-    <tr>
-      <th>Website</th>
-      <th>Kullanıcı Adı</th>
-      <th>Parola</th>
-      <th>Oluşturulma Tarihi</th>
-      <th>Güncelleme Tarihi</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for password in passwords %}
-    <tr>
-      <td>
-        {{ password.website }}
-        <button class="go-website" data-website="{{ password.website }}">Git</button>
-      </td>
-      <td>
-        {{ password.username }}
-        <button class="copy-username" data-username="{{ password.username }}">Kopyala</button>
-      </td>
-      <td>
-        <span class="password" data-password="{{ password.password }}">
-          {% for i in password.password %}*{% endfor %}
-        </span>
-        <button class="copy-password">Kopyala</button>
-      </td>
-      <td>{{ password.created_at }}</td>
-      <td>{{ password.updated_at }}</td>
-      <td>
-        <a href="{% url 'delete_password' password.id %}" class="delete-password">Sil</a>
-        <a href="{% url 'update_password' password.id %}" class="update-password">Güncelle</a>
-      </td>
-    </tr>
-    {% empty %}
-    <tr>
-      <td colspan="6">Kaydedilmiş şifre yok.</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+  <!-- Parola Listesi -->
+  {% if passwords %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Website</th>
+            <th>Kullanıcı Adı</th>
+            <th>Parola</th>
+            <th>Oluşturulma Tarihi</th>
+            <th>Güncelleme Tarihi</th>
+            <th>İşlemler</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for password in passwords %}
+          <tr>
+            <td>
+              <a href="{{ password.website }}" target="_blank">{{ password.website }}</a>
+            </td>
+            <td>
+              {{ password.username }}
+              <button class="btn btn-sm btn-primary copy-username" data-username="{{ password.username }}">Kopyala</button>
+            </td>
+            <td>
+              <span class="password" data-password="{{ password.password }}">
+                {% for i in password.password %}*{% endfor %}
+              </span>
+              <button class="btn btn-sm btn-primary copy-password">Kopyala</button>
+            </td>
+            <td>{{ password.created_at }}</td>
+            <td>{{ password.updated_at }}</td>
+            <td>
+              <a href="{% url 'delete_password' password.id %}" class="btn btn-sm btn-danger delete-password">Sil</a>
+              <a href="{% url 'update_password' password.id %}" class="btn btn-sm btn-warning update-password">Düzenle</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="alert alert-info">Kayıtlı parola bulunmamaktadır.</p>
+  {% endif %}
+</div>
 
-  
-  <script>
-    // Parola Kopyalama
-    document.querySelectorAll(".copy-password").forEach(button => {
-      button.addEventListener("click", function() {
-        const passwordSpan = this.parentElement.querySelector(".password");
-        const password = passwordSpan.getAttribute("data-password");
-        
-        const tempInput = document.createElement('input');
-        tempInput.value = password;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempInput);
-        
-        // Buton metnini "Kopyalandı" olarak değiştir
-        this.textContent = "Kopyalandı";
-  
-        // 2 saniye sonra buton metnini tekrar "Kopyala" olarak geri değiştir
-        setTimeout(() => {
-          this.textContent = "Kopyala";
-        }, 2000);
-      });
+<script>
+  // Parola Kopyalama
+  document.querySelectorAll(".copy-password").forEach(button => {
+    button.addEventListener("click", function() {
+      const passwordSpan = this.parentElement.querySelector(".password");
+      const password = passwordSpan.getAttribute("data-password");
+      
+      const tempInput = document.createElement('input');
+      tempInput.value = password;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      
+      // Buton metnini "Kopyalandı" olarak değiştir
+      this.textContent = "Kopyalandı";
+
+      // 2 saniye sonra buton metnini tekrar "Kopyala" olarak geri değiştir
+      setTimeout(() => {
+        this.textContent = "Kopyala";
+      }, 2000);
     });
-  
-    // Kullanıcı Adı Kopyalama
-    document.querySelectorAll(".copy-username").forEach(button => {
-      button.addEventListener("click", function() {
-        const username = this.getAttribute("data-username");
-        
-        const tempInput = document.createElement('input');
-        tempInput.value = username;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempInput);
-        
-        // Buton metnini "Kopyalandı" olarak değiştir
-        this.textContent = "Kopyalandı";
-  
-        // 2 saniye sonra buton metnini tekrar "Kopyala" olarak geri değiştir
-        setTimeout(() => {
-          this.textContent = "Kopyala";
-        }, 2000);
-      });
+  });
+
+  // Kullanıcı Adı Kopyalama
+  document.querySelectorAll(".copy-username").forEach(button => {
+    button.addEventListener("click", function() {
+      const username = this.getAttribute("data-username");
+      
+      const tempInput = document.createElement('input');
+      tempInput.value = username;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      
+      // Buton metnini "Kopyalandı" olarak değiştir
+      this.textContent = "Kopyalandı";
+
+      // 2 saniye sonra buton metnini tekrar "Kopyala" olarak geri değiştir
+      setTimeout(() => {
+        this.textContent = "Kopyala";
+      }, 2000);
     });
-  
-    // Web sitesine gitme
-    document.querySelectorAll(".go-website").forEach(button => {
-      button.addEventListener("click", function() {
-        const website = this.getAttribute("data-website");
-        window.open(website, "_blank");
-      });
-    });
-  </script>
-  
+  });
+</script>
+
 {% endblock %}

@@ -3,7 +3,15 @@ from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 
 def index(request):
-    return render(request, 'myapp/index.html')
+    # Son 10 şifreyi alın veya uygun bir filtreleme yapın
+    last_12_passwords = Password.objects.all().order_by('-created_at')[:12]
+
+    context = {
+        'last_12_passwords': last_12_passwords,
+    }
+
+    return render(request, 'myapp/index.html', context)
+
 
 # views.py
 
@@ -119,3 +127,29 @@ def update_password(request, password_id):
         })
     
     return render(request, 'myapp/update_password.html', {'form': form, 'password': password})
+
+
+# generator.py
+
+import random
+import string
+
+def password_generator(request):
+    if request.method == 'POST':
+        length = int(request.POST.get('password-length', 12))
+        include_uppercase = bool(request.POST.get('include-uppercase', False))
+        include_numbers = bool(request.POST.get('include-numbers', False))
+        include_symbols = bool(request.POST.get('include-symbols', False))
+
+        characters = string.ascii_lowercase
+        if include_uppercase:
+            characters += string.ascii_uppercase
+        if include_numbers:
+            characters += string.digits
+        if include_symbols:
+            characters += string.punctuation
+
+        generated_password = ''.join(random.choice(characters) for _ in range(length))
+        return render(request, 'myapp/password_generator.html', {'generated_password': generated_password})
+
+    return render(request, 'myapp/password_generator.html')

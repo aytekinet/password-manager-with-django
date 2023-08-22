@@ -11,6 +11,36 @@
 {% endblock %}
 
 {% block content %}
-  <p>Merhaba, bu ana sayfa içeriğidir.</p>
-  <!-- Diğer içerikler buraya gelebilir -->
+  <div class="container mt-4">
+    <!-- Giriş Yapmış Kullanıcılar İçin Şifrelerin Listesi -->
+    {% if user.is_authenticated %}
+      <h3 style="text-align:center; margin-bottom:35px;">Hoşgeldiniz <span class="text-success">{{ user.username }}</span>, eklediğiniz son şifreleriniz:</h3>
+      <div class="row">
+        {% for password in last_12_passwords %}
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ password.website }}</h5>
+                <p class="card-text">Kullanıcı Adı: {{ password.username }}</p>
+                <p class="card-text">Parola: <span class="password" data-password="{{ password.password }}">
+                  {% for i in password.password %}*{% endfor %}
+                </span></p>
+                <a href="#" class="btn btn-primary copy-password btn-sm">Parolayı Kopyala</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <!-- Login olmayan kullanıcılar için giriş kartı -->
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Hoş Geldiniz!</h5>
+          <p class="card-text">Hesabınıza giriş yapın veya yeni bir hesap oluşturun.</p>
+          <a href="{% url 'login' %}" class="btn btn-primary">Giriş Yap</a>
+          <a href="{% url 'register' %}" class="btn btn-secondary">Kayıt Ol</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
 {% endblock %}

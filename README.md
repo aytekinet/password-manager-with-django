@@ -15,3 +15,7 @@
 - Django: Web uygulaması geliştirmek için Python tabanlı bir çerçeve.
 - HTML, CSS (Bootstrap), JavaScript: Arayüz ve kullanıcı deneyimini geliştirmek için kullanılır.
 
+## Önizlemeler: 
+[Anasayfa](https://prnt.sc/SGhSmxethut9) | 
+[Dashboard](https://prnt.sc/OCX1etq83srv) | 
+[Şifre Oluşturucu](https://prnt.sc/MQfrMXVvVILm) | 

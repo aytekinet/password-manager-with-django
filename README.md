@@ -12,8 +12,7 @@
 
 ## Kullanılan Teknolojiler
 
-- Django: Web uygulaması geliştirmek için Python tabanlı bir çerçeve.
-- HTML, CSS (Bootstrap), JavaScript: Arayüz ve kullanıcı deneyimini geliştirmek için kullanılır.
+- Django, HTML, CSS (Bootstrap), JavaScript
 
 ## Önizlemeler: 
 [Anasayfa](https://prnt.sc/SGhSmxethut9) | 

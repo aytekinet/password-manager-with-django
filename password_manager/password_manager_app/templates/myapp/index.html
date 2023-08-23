@@ -25,7 +25,7 @@
                   <p class="card-text">Parola: <span class="password" data-password="{{ password.password }}">
                     {% for i in password.password %}*{% endfor %}
                   </span></p>
-                  <a href="#" class="btn btn-primary copy-password btn-sm">Parolayı Kopyala</a>
+                  <button class="btn btn-primary copy-password btn-sm">Parolayı Kopyala</button>
                 </div>
               </div>
             </div>
@@ -46,4 +46,36 @@
       </div>
     {% endif %}
   </div>
+</div>
+
+<script>
+    // Parola Kopyalama
+    document.querySelectorAll(".copy-password").forEach(button => {
+      button.addEventListener("click", function() {
+        const passwordSpan = this.parentElement.querySelector(".password");
+        const password = passwordSpan.getAttribute("data-password");
+        
+        const tempInput = document.createElement('input');
+        tempInput.value = password;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        
+        // Buton rengini yeşil yap
+        this.classList.add("btn-success");
+        
+        // Buton metnini "Kopyalandı" olarak değiştir
+        this.textContent = "Kopyalandı";
+
+        // 2 saniye sonra buton metnini tekrar "Parolayı Kopyala" olarak geri değiştir
+        setTimeout(() => {
+          this.textContent = "Parolayı Kopyala";
+          // Yeşil rengi kaldır
+          this.classList.remove("btn-success");
+        }, 2000);
+      });
+    });
+</script>
+
 {% endblock %}

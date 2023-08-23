@@ -1,14 +1,20 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
+from .models import Password
 
 def index(request):
-    # Son 10 şifreyi alın veya uygun bir filtreleme yapın
-    last_12_passwords = Password.objects.all().order_by('-created_at')[:12]
-
-    context = {
-        'last_12_passwords': last_12_passwords,
-    }
+    if request.user.is_authenticated:
+        # Oturum açmış kullanıcının şifrelerini alın veya uygun bir filtreleme yapın
+        user_passwords = Password.objects.filter(user=request.user).order_by('-created_at')[:12]
+        
+        context = {
+            'user_passwords': user_passwords,
+        }
+    else:
+        context = {
+            'user_passwords': None,
+        }
 
     return render(request, 'myapp/index.html', context)
 
@@ -134,6 +140,8 @@ def update_password(request, password_id):
 import random
 import string
 
+from django.shortcuts import render
+
 def password_generator(request):
     if request.method == 'POST':
         length = int(request.POST.get('password-length', 12))
@@ -150,6 +158,20 @@ def password_generator(request):
             characters += string.punctuation
 
         generated_password = ''.join(random.choice(characters) for _ in range(length))
-        return render(request, 'myapp/password_generator.html', {'generated_password': generated_password})
+        
+        # İşaretlenen checkbox'ların değerlerini bir dictionary içinde toplayın
+        checkbox_values = {
+            'include_uppercase': include_uppercase,
+            'include_numbers': include_numbers,
+            'include_symbols': include_symbols,
+        }
+
+        # Şifre ve checkbox değerlerini birlikte şablona aktarın
+        context = {
+            'generated_password': generated_password,
+            **checkbox_values,
+        }
+
+        return render(request, 'myapp/password_generator.html', context)
 
     return render(request, 'myapp/password_generator.html')

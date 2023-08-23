@@ -12,27 +12,30 @@
 
 {% block content %}
   <div class="container mt-4">
-    <!-- Giriş Yapmış Kullanıcılar İçin Şifrelerin Listesi -->
     {% if user.is_authenticated %}
       <h3 style="text-align:center; margin-bottom:35px;">Hoşgeldiniz <span class="text-success">{{ user.username }}</span>, eklediğiniz son şifreleriniz:</h3>
       <div class="row">
-        {% for password in last_12_passwords %}
-          <div class="col-md-4 mb-3">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">{{ password.website }}</h5>
-                <p class="card-text">Kullanıcı Adı: {{ password.username }}</p>
-                <p class="card-text">Parola: <span class="password" data-password="{{ password.password }}">
-                  {% for i in password.password %}*{% endfor %}
-                </span></p>
-                <a href="#" class="btn btn-primary copy-password btn-sm">Parolayı Kopyala</a>
+        {% if user_passwords %}
+          {% for password in user_passwords %}
+            <div class="col-md-4 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">{{ password.website }}</h5>
+                  <p class="card-text">Kullanıcı Adı: {{ password.username }}</p>
+                  <p class="card-text">Parola: <span class="password" data-password="{{ password.password }}">
+                    {% for i in password.password %}*{% endfor %}
+                  </span></p>
+                  <a href="#" class="btn btn-primary copy-password btn-sm">Parolayı Kopyala</a>
+                </div>
               </div>
             </div>
-          </div>
-        {% endfor %}
+          {% endfor %}
+        {% else %}
+          <p class="alert alert-info">Henüz şifre eklememişsiniz.</p>
+        {% endif %}
       </div>
     {% else %}
-      <!-- Login olmayan kullanıcılar için giriş kartı -->
+      <!-- Login olmayan kullanıcılar için giriş kartı veya mesajı buraya gelecek -->
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Hoş Geldiniz!</h5>
